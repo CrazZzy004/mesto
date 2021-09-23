@@ -1,0 +1,7 @@
+.header {
+  padding-top: 45px;
+  width: calc(100% - 2*200px);
+  display: flex;
+  margin: 0 auto;
+  flex-direction: column;
+}
