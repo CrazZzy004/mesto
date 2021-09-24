@@ -6,3 +6,23 @@
   margin: 0 auto;
   flex-direction: column;
 }
+
+@media screen and (max-width: 1120px) {
+  .header {
+    width: calc(100% - 2*100px);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    width: calc(100% - 2*50px);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .header {
+    padding-top: 28px;
+    width: 100%;
+    margin: 0;
+  }
+}
