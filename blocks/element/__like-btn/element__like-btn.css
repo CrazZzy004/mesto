@@ -5,7 +5,7 @@
   background-repeat: no-repeat;
   width: 22px;
   height: 19px;
-  border: transparent;
+  border: none;
   cursor: pointer;
   transition: .3s ease;
 }

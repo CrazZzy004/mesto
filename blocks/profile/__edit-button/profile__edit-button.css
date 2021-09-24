@@ -2,7 +2,7 @@
   background: transparent url(../../../images/profile-edit-btn.svg);
   background-size: contain;
   background-repeat: no-repeat;
-  border: 0;
+  border: none;
   width: 24px;
   height: 24px;
   margin-top: 15px;
