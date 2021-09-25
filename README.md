@@ -12,4 +12,4 @@
 * JavaScript
 * Псевдоклассы
 
-## [Ссылка на проект &rarr;]()
+## [Ссылка на проект &rarr;](https://verachernushina.github.io/mesto/index.html)
