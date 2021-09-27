@@ -1,9 +1,7 @@
 .popup__input {
-  display: flex;
-  margin: 30px 0 0;
+  margin: 0 0 25px;
   padding: 0;
   max-width: 358px;
-  min-height: 27px;
   width: 100%;
   border: 0;
   font-family: inherit;
@@ -11,8 +9,9 @@
   border-bottom: 1px solid rgb(0,0,0, 0.2);
   font-weight: 400;
   font-size: 14px;
-  line-height: 16.94px;
+  line-height: 32px;
   color: #000;
+  outline: none;
 }
 
 .popup__input::-webkit-input-placeholder {

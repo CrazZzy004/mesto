@@ -1,5 +1,5 @@
 .popup__submit-btn {
-  margin: 48px 0 0;
+  margin: 23px 0 0;
   padding: 0;
   max-width: 358px;
   width: 100%;
@@ -10,7 +10,12 @@
   background-color: #000;
   cursor: pointer;
   transition: 0.3s ease;
-}
+  font-family: inherit;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21.78px;
+  text-align: center;
+  }
 
 .popup__submit-btn:hover {
   opacity: 0.8;
