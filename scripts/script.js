@@ -1,30 +1,53 @@
+// Находим попап в DOM
 let popup = document.querySelector('.popup');
+// Находим кнопку закрытия попапа в DOM
 let popupCloseBtn = popup.querySelector('.popup__close');
+// Находим кнопку открытия попапа в DOM
 let profileEditBtn = document.querySelector('.profile__edit-button');
 
-function togglePopup() {
-  popup.classList.toggle('popup_opened');
-}
-
-profileEditBtn.addEventListener('click', togglePopup);
-popupCloseBtn.addEventListener('click', togglePopup);
-
+// Находим форму в DOM
 let form = popup.querySelector('.popup__form');
-let nameInput = form.querySelector('.popup__name');
-let jobInput = form.querySelector('.popup__job');
+// Находим поля формы в DOM
+let nameInput = form.querySelector('#name');
+let jobInput = form.querySelector('#job');
+
 let profileName = document.querySelector('.profile__title');
 let profileJob = document.querySelector('.profile__description');
 
-function formSubmitHandler (evt) {
+// Открываем попап
+function openPopup() {
+  if (popup.classList.contains('popup_opened') === false) {
+    popup.classList.add('popup_opened');
+    // Заносим данные в форму
+    function addValue() {
+      nameInput.value = profileName.textContent;
+      jobInput.value = profileJob.textContent;
+    }
+    addValue();
+  }
+}
+
+// Закрываем попап
+function closePopup() {
+  if (popup.classList.contains('popup_opened') === true) {
+    popup.classList.remove('popup_opened');
+  }
+}
+
+// Инструкция для обработчика формы
+function submitFormHandler (evt) {
   evt.preventDefault();
 
   profileName.textContent = nameInput.value;
   profileJob.textContent = jobInput.value;
+
+  closePopup();
 }
 
-form.addEventListener('submit', formSubmitHandler);
+// Обработчик кнопки Edit
+profileEditBtn.addEventListener('click', openPopup);
+// Обработчик кнопки Close
+popupCloseBtn.addEventListener('click', closePopup);
 
-let submitBtn = popup.querySelector('.popup__submit-btn');
-
-//Закрытие окна при нажатии кнопки "Сохранить"
-submitBtn.addEventListener('click', togglePopup);
+// Обработчик формы
+form.addEventListener('submit', submitFormHandler);
