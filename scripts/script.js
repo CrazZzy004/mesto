@@ -14,24 +14,22 @@ let jobInput = form.querySelector('#job');
 let profileName = document.querySelector('.profile__title');
 let profileJob = document.querySelector('.profile__description');
 
+// Заносим данные в форму
+  function addValue() {
+    nameInput.value = profileName.textContent;
+    jobInput.value = profileJob.textContent;
+  }
+
+
 // Открываем попап
 function openPopup() {
-  if (popup.classList.contains('popup_opened') === false) {
-    popup.classList.add('popup_opened');
-    // Заносим данные в форму
-    function addValue() {
-      nameInput.value = profileName.textContent;
-      jobInput.value = profileJob.textContent;
-    }
-    addValue();
-  }
+  popup.classList.add('popup_opened');
+  addValue();
 }
 
 // Закрываем попап
 function closePopup() {
-  if (popup.classList.contains('popup_opened') === true) {
-    popup.classList.remove('popup_opened');
-  }
+  popup.classList.remove('popup_opened');
 }
 
 // Инструкция для обработчика формы
