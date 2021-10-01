@@ -16,7 +16,14 @@
   opacity: 0.6;
 }
 
-@media screen and (max-width: 512px) {
+@media screen and (max-width: 720px) {
+  .popup__close {
+    top: -36px;
+    right: -36px;
+  }
+}
+
+@media screen and (max-width: 600px) {
   .popup__close {
     background: transparent url(../../../images/close-icn-mobile.svg) center no-repeat;
     width: 20px;
