@@ -52,7 +52,7 @@ const cardsContainer = document.querySelector('.elements');
 // находим шаблон для создания карточки
 const cardTemplate = document.querySelector('.element-template').content;
 // находим инпут для названия карточки
-const cardNameInput = formAddNewCard.querySelector('#name');
+const cardNameInput = formAddNewCard.querySelector('#title');
 // находим инпут ссылки на изображение
 const cardLinkInput = popupAddNewCard.querySelector('#link');
 // находим попап просмотра изображения
