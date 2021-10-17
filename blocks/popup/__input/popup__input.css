@@ -15,11 +15,11 @@
 }
 
 .popup__input::-webkit-input-placeholder {
-  color: #000;
+  color: #C4C4C4;
 }
 
 .popup__input::-moz-placeholder {
-  color: #000;
+  color: #C4C4C4;
 }
 
 @media screen and (max-width: 480px) {
