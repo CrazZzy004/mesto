@@ -1,30 +1,3 @@
-// массив с готовыми карточками
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
 // находим попап редактирования профиля
 const popupEditProfile = document.querySelector('.popup_type_edit');
 // находим кнопку для открытия попапа редактирования профиля
@@ -34,11 +7,11 @@ const popupEditCloseBtn = popupEditProfile.querySelector('.popup__close');
 // находим форму попапа редактирования профиля
 const formEditProfile = popupEditProfile.querySelector('.popup__form');
 // находим инпуты формы попапа редактирования профиля
-let nameInput = formEditProfile.querySelector('#name');
-let jobInput = formEditProfile.querySelector('#job');
+const nameInput = formEditProfile.querySelector('#name');
+const jobInput = formEditProfile.querySelector('#job');
 // выбираем куда будут импортироваться данные из формы
-let profileName = document.querySelector('.profile__title');
-let profileJob = document.querySelector('.profile__description');
+const profileName = document.querySelector('.profile__title');
+const profileJob = document.querySelector('.profile__description');
 // Находим попап добавления карточки
 const popupAddNewCard = document.querySelector('.popup_type_new-card');
 // находим кнопку для открытия попапа добавления новой карточки
@@ -59,17 +32,20 @@ const cardLinkInput = popupAddNewCard.querySelector('#link');
 const popupViewImage = document.querySelector('.popup_type_image');
 // находим кнопку закрытия попапа просмотра изображений
 const popupViewImageCloseBtn = popupViewImage.querySelector('.popup__close');
-
+// находим изображение попапа просмотра
+const viewImagePopupImg = popupViewImage.querySelector('.popup__img');
+// находим название изображения попапа просмотра
+const viewImagePopupName = popupViewImage.querySelector('.popup__caption');
 
 // функция показа/скрытия попапа
-const togglePopup = (somePopup) => {
-  somePopup.classList.toggle('popup_opened');
+const togglePopup = (popup) => {
+  popup.classList.toggle('popup_opened');
 };
 // Заносим данные в форму попапа редактирования профиля
-function addValue() {
+function fillInEditProfileFormInputs() {
   nameInput.value = profileName.textContent;
   jobInput.value = profileJob.textContent;
-}
+};
 // Инструкция для обработчика формы попапа редактирования профиля
 function submitEditFormHandler (evt) {
   evt.preventDefault();
@@ -78,10 +54,10 @@ function submitEditFormHandler (evt) {
   profileJob.textContent = jobInput.value;
 
   togglePopup(popupEditProfile);
-}
+};
 
-// функция добавления карточки
-const addCard = (nameValue, imgValue) => {
+// функция создания карточки
+const createCard = (nameValue, imgValue) => {
   const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
   // находим изображение
   const cardImg = cardElement.querySelector('.element__img');
@@ -91,26 +67,10 @@ const addCard = (nameValue, imgValue) => {
   const cardLikeBtn = cardElement.querySelector('.element__like-btn');
   // находим кнопку удаления карточки
   const cardDeleteBtn = cardElement.querySelector('.element__delete-btn');
-  // находим изображение попапа просмотра
-  const viewImagePopupImg = popupViewImage.querySelector('.popup__img');
-  // находим название изображения попапа просмотра
-  const viewImagePopupName = popupViewImage.querySelector('.popup__caption');
 
   cardName.textContent = nameValue;
   cardImg.src = imgValue;
   cardImg.alt = nameValue;
-
-  //функция открытия попапа просмотра изображений
-  const openViewImagePopup = () => {
-    togglePopup(popupViewImage);
-
-    viewImagePopupImg.src = cardImg.src;
-    viewImagePopupName.textContent = cardName.textContent;
-    viewImagePopupImg.alt = cardName.textContent;
-
-    // листенер закрытия попапа просмотра изображения
-    popupViewImageCloseBtn.onclick = () => togglePopup(popupViewImage);
-  };
 
   // обработчик кнопки лайк
   cardLikeBtn.addEventListener('click', (evt) => {
@@ -123,11 +83,25 @@ const addCard = (nameValue, imgValue) => {
   // листенер открытия попапа просмотра изображения
   cardImg.addEventListener('click', openViewImagePopup);
 
-  cardsContainer.prepend(cardElement);
+  // возвращаем готовую карточку
+  return cardElement;
+};
+// функция добавления карточки в DOM
+const addCard = (name, link) => {
+  cardsContainer.prepend(createCard(name, link));
+};
+//функция открытия попапа просмотра изображений
+const openViewImagePopup = (event) => {
+  togglePopup(popupViewImage);
+
+  eventTargetImg = event.target
+  viewImagePopupImg.src = eventTargetImg.src;
+  viewImagePopupName.textContent = eventTargetImg.alt;
+  viewImagePopupImg.alt = eventTargetImg.alt;
 };
 // функция загрузки карточек из массива
-const uploadReadyCards = (array) => {
-  array.map((el) => {
+const renderInitialCards = (cards) => {
+  cards.map((el) => {
   return addCard(el.name, el.link);
   });
 };
@@ -136,7 +110,7 @@ const uploadReadyCards = (array) => {
 // Обработчик кнопки Edit попапа редактирования профиля
 profileEditBtn.addEventListener('click', () => {
   togglePopup(popupEditProfile);
-  addValue();
+  fillInEditProfileFormInputs();
 });
 // Обработчик кнопки Close попапа редактирования профиля
 popupEditCloseBtn.addEventListener('click', () => {
@@ -156,16 +130,15 @@ popupAddNewCardCloseBtn.addEventListener('click', () => {
 formAddNewCard.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
-  const name = cardNameInput;
-  const img = cardLinkInput;
+  addCard(cardNameInput.value, cardLinkInput.value);
 
-  addCard(name.value, img.value);
-
-  name.value = "";
-  img.value = "";
+  cardNameInput.value = "";
+  cardLinkInput.value = "";
 
   togglePopup(popupAddNewCard);
 });
+// листенер закрытия попапа просмотра изображения
+popupViewImageCloseBtn.onclick = () => togglePopup(popupViewImage);
 
 // автоматическая загрузка карточек на страницу
-uploadReadyCards(initialCards);
+renderInitialCards(initialCards);
