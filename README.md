@@ -11,5 +11,6 @@
 * БЭМ
 * JavaScript
 * Псевдоклассы
+* Валидация форм
 
 ## [Ссылка на проект &rarr;](https://verachernushina.github.io/mesto/index.html)

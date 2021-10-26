@@ -2,7 +2,7 @@
   display: flex;
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.8s ease;
+  transition: opacity 0.8s linear;
   font-family: 'Inter', Arial, Helvetica, sans-serif;
   align-items: center;
   justify-content: center;
