@@ -126,16 +126,26 @@ popupAddNewCardOpenBtn.addEventListener('click', () => {
 popupAddNewCardCloseBtn.addEventListener('click', () => {
   togglePopup(popupAddNewCard);
 });
-// листенер submit формы создания карточки
-formAddNewCard.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  addCard(cardNameInput.value, cardLinkInput.value);
-  formAddNewCard.reset();
-
-  togglePopup(popupAddNewCard);
-});
 // листенер закрытия попапа просмотра изображения
 popupViewImageCloseBtn.onclick = () => togglePopup(popupViewImage);
+
+// закрытие попапов кликом на оверлей
+popupEditProfile.addEventListener('click', (event) => {
+  if (event.target.classList.contains('popup') || event.target.classList.contains('popupEditCloseBtn')) {
+    togglePopup(popupEditProfile);
+  }
+});
+popupAddNewCard.addEventListener('click', (event) => {
+  if (event.target.classList.contains('popup') || event.target.classList.contains('popupEditCloseBtn')) {
+    togglePopup(popupAddNewCard);
+  }
+});
+popupViewImage.addEventListener('click', (event) => {
+  if (event.target.classList.contains('popup') || event.target.classList.contains('popupEditCloseBtn')) {
+    togglePopup(popupViewImage);
+  }
+})
+
 
 // автоматическая загрузка карточек на страницу
 renderInitialCards(initialCards);
