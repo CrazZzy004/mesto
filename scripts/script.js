@@ -126,14 +126,11 @@ popupAddNewCardOpenBtn.addEventListener('click', () => {
 popupAddNewCardCloseBtn.addEventListener('click', () => {
   togglePopup(popupAddNewCard);
 });
-// листенер submit формы созлания карточки
+// листенер submit формы создания карточки
 formAddNewCard.addEventListener('submit', (evt) => {
   evt.preventDefault();
-
   addCard(cardNameInput.value, cardLinkInput.value);
-
-  cardNameInput.value = "";
-  cardLinkInput.value = "";
+  formAddNewCard.reset();
 
   togglePopup(popupAddNewCard);
 });
