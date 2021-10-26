@@ -126,6 +126,13 @@ popupAddNewCardOpenBtn.addEventListener('click', () => {
 popupAddNewCardCloseBtn.addEventListener('click', () => {
   togglePopup(popupAddNewCard);
 });
+// листенер submit формы создания карточки
+formAddNewCard.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  addCard(cardNameInput.value, cardLinkInput.value);
+  formAddNewCard.reset();
+  togglePopup(popupAddNewCard);
+});
 // листенер закрытия попапа просмотра изображения
 popupViewImageCloseBtn.onclick = () => togglePopup(popupViewImage);
 
@@ -145,7 +152,13 @@ popupViewImage.addEventListener('click', (event) => {
     togglePopup(popupViewImage);
   }
 })
-
+// закрытие попапа клавишей Escape
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    const activePopup = document.querySelector('.popup_opened');
+    togglePopup(activePopup);
+  };
+});
 
 // автоматическая загрузка карточек на страницу
 renderInitialCards(initialCards);
