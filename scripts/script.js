@@ -39,12 +39,12 @@ const viewImagePopupName = popupViewImage.querySelector('.popup__caption');
 
 // функция открытия попапа
 function openPopup (popup) {
-  document.addEventListener('keydown', handleEscUp);
   popup.classList.add('popup_opened');
+  document.addEventListener('keyup', handleEscUp);
 };
 // функция закрытия попапа
 function closePopup (popup) {
-  document.removeEventListener('keydown', handleEscUp);
+  document.removeEventListener('keyup', handleEscUp);
   popup.classList.remove('popup_opened');
 };
 // обработчик клика по кнопке Escape
