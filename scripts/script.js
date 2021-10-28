@@ -50,8 +50,15 @@ function closePopup (popup) {
 // обработчик клика по кнопке Escape
 const handleEscUp = (event) => {
   event.preventDefault();
-  const activePopup = document.querySelector('.popup_opened');
   if (event.key === 'Escape') {
+    const activePopup = document.querySelector('.popup_opened');
+    closePopup(activePopup);
+  };
+};
+// функция закрытия попапа кликом на оверлей
+function closeByOverlayClick (event) {
+  const activePopup = document.querySelector('.popup_opened');
+  if (event.target.classList.contains('popup') || event.target.classList.contains('popupEditCloseBtn')) {
     closePopup(activePopup);
   };
 };
@@ -146,25 +153,17 @@ formAddNewCard.addEventListener('submit', (evt) => {
   addCard(cardNameInput.value, cardLinkInput.value);
   formAddNewCard.reset();
   closePopup(popupAddNewCard);
+  // находим кнопку submit и деактивируем ее после создания карточки
+  const buttonElement = formAddNewCard.querySelector('.form__submit');
+  buttonElement.setAttribute('disabled', 'disabled');
 });
 // листенер закрытия попапа просмотра изображения
 popupViewImageCloseBtn.onclick = () => closePopup(popupViewImage);
 
 // закрытие попапов кликом на оверлей
-popupEditProfile.addEventListener('click', (event) => {
-  if (event.target.classList.contains('popup') || event.target.classList.contains('popupEditCloseBtn')) {
-    closePopup(popupEditProfile);
-  }
-});
-popupAddNewCard.addEventListener('click', (event) => {
-  if (event.target.classList.contains('popup') || event.target.classList.contains('popupEditCloseBtn')) {
-    closePopup(popupAddNewCard);
-  }
-});
-popupViewImage.addEventListener('click', (event) => {
-  if (event.target.classList.contains('popup') || event.target.classList.contains('popupEditCloseBtn')) {
-    closePopup(popupViewImage);
-  }
-})
+popupEditProfile.addEventListener('mousedown', closeByOverlayClick);
+popupAddNewCard.addEventListener('mousedown', closeByOverlayClick);
+popupViewImage.addEventListener('mousedown', closeByOverlayClick);
+
 // автоматическая загрузка карточек на страницу
 renderInitialCards(initialCards);
