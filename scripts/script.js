@@ -58,7 +58,7 @@ const handleEscUp = (event) => {
 // функция закрытия попапа кликом на оверлей
 function closeByOverlayClick (event) {
   const activePopup = document.querySelector('.popup_opened');
-  if (event.target.classList.contains('popup') || event.target.classList.contains('popupEditCloseBtn')) {
+  if (event.target.classList.contains('popup')) {
     closePopup(activePopup);
   };
 };
