@@ -20,10 +20,11 @@ const popupAddNewCardOpenBtn = document.querySelector('.profile__add-button');
 const popupAddNewCardCloseBtn = popupAddNewCard.querySelector('.popup__close');
 // находим форму попапа добавления новой карточки
 const formAddNewCard = popupAddNewCard.querySelector('.popup__form');
+
 // находим контейнер для карточек
 const cardsContainer = document.querySelector('.elements');
 // находим шаблон для создания карточки
-const cardTemplate = document.querySelector('.element-template').content;
+//const cardTemplate = document.querySelector('.element-template').content;
 // находим инпут для названия карточки
 const cardNameInput = formAddNewCard.querySelector('#title');
 // находим инпут ссылки на изображение
@@ -76,57 +77,15 @@ function submitEditFormHandler (evt) {
 
   closePopup(popupEditProfile);
 };
-
-// функция создания карточки
-const createCard = (nameValue, imgValue) => {
-  const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
-  // находим изображение
-  const cardImg = cardElement.querySelector('.element__img');
-  // находим название изображения
-  const cardName = cardElement.querySelector('.element__title');
-  // находим кнопку лайк карточки
-  const cardLikeBtn = cardElement.querySelector('.element__like-btn');
-  // находим кнопку удаления карточки
-  const cardDeleteBtn = cardElement.querySelector('.element__delete-btn');
-
-  cardName.textContent = nameValue;
-  cardImg.src = imgValue;
-  cardImg.alt = nameValue;
-
-  // обработчик кнопки лайк
-  cardLikeBtn.addEventListener('click', (evt) => {
-    evt.target.classList.toggle('element__like-btn_active');
-  });
-  //обработчик кнопки Delete
-  cardDeleteBtn.addEventListener('click', (event) => {
-    event.target.closest('.element').remove();
-  });
-  // листенер открытия попапа просмотра изображения
-  cardImg.addEventListener('click', openViewImagePopup);
-
-  // возвращаем готовую карточку
-  return cardElement;
-};
-// функция добавления карточки в DOM
-const addCard = (name, link) => {
-  cardsContainer.prepend(createCard(name, link));
-};
-//функция открытия попапа просмотра изображений
-const openViewImagePopup = (event) => {
-  openPopup(popupViewImage);
-
-  eventTargetImg = event.target
-  viewImagePopupImg.src = eventTargetImg.src;
-  viewImagePopupName.textContent = eventTargetImg.alt;
-  viewImagePopupImg.alt = eventTargetImg.alt;
-};
 // функция загрузки карточек из массива
-const renderInitialCards = (cards) => {
-  cards.map((el) => {
-  return addCard(el.name, el.link);
-  });
-};
+const renderInitialCards = (array) => {
+  array.forEach((item) => {
+    const card = new Card(item.name, item.link, '.element-template');
+    const cardElement = card.generateCard();
 
+    cardsContainer.prepend(cardElement);
+  })
+}
 
 // Обработчик кнопки Edit попапа редактирования профиля
 profileEditBtn.addEventListener('click', () => {
@@ -147,23 +106,102 @@ popupAddNewCardOpenBtn.addEventListener('click', () => {
 popupAddNewCardCloseBtn.addEventListener('click', () => {
   closePopup(popupAddNewCard);
 });
+// закрытие попапов кликом на оверлей
+popupEditProfile.addEventListener('mousedown', closeByOverlayClick);
+popupAddNewCard.addEventListener('mousedown', closeByOverlayClick);
+popupViewImage.addEventListener('mousedown', closeByOverlayClick);
+
+class Card {
+  constructor(name, link, cardSelector) {
+    this._container = document.querySelector(cardSelector);
+    this._name = name;
+    this._link = link;
+    this._cardSelector = cardSelector;
+  }
+
+  _getTemplate() {
+    const cardElement = document
+    .querySelector(this._cardSelector)
+    .content
+    .querySelector('.element')
+    .cloneNode(true);
+
+    return cardElement;
+  }
+
+  // метод слушателя кнопки "лайк"
+  _handleLikeCard() {
+    const likeBtn = this._element.querySelector('.element__like-btn');
+    likeBtn.classList.toggle('element__like-btn_active');
+  }
+
+  // метод слушателя кнопки "удалить"
+  _handleDeleteCard() {
+    this._element.remove();
+  }
+
+  // метод слушателя открытия попапа просмотра изображения
+  _handleOpenPopup() {
+    viewImagePopupImg.src = this._link;
+    viewImagePopupName.textContent = this._name;
+    popupViewImage.classList.add('popup_opened');
+  }
+
+  // метод слушателя закрытия попапа просмотра изображения
+  _handleClosePopup() {
+    viewImagePopupImg.src = '';
+    viewImagePopupName.textContent = '';
+    popupViewImage.classList.remove('popup_opened');
+  }
+
+  _setEventListeners() {
+    // открытие попапа просмотра изображения кликом по изображению
+    this._element.querySelector('.element__img').addEventListener('click', () => {
+      this._handleOpenPopup();
+    })
+    // закрытие попапа просмотра изображения кликом на кнопку закрытия
+    popupViewImageCloseBtn.addEventListener('click', () => {
+      this._handleClosePopup();
+    })
+    // слушатель кнопки удаления карточки
+    this._element.querySelector('.element__delete-btn').addEventListener('click', () => {
+      this._handleDeleteCard();
+    })
+    // слушатель кнопки лайк
+    this._element.querySelector('.element__like-btn').addEventListener('click', () => {
+      this._handleLikeCard();
+    })
+  }
+
+  // метод создания готовой карточки
+  generateCard() {
+    this._element = this._getTemplate();
+    this._setEventListeners();
+
+    this._element.querySelector('.element__img').src = this._link;
+    this._element.querySelector('.element__title').textContent = this._name;
+
+    return this._element;
+  }
+}
+
+// функция добавления карточки на страницу из формы
+const addCard = (name, link) => {
+  const card = new Card(name, link, '.element-template').generateCard();
+  cardsContainer.prepend(card);
+};
+
 // листенер submit формы создания карточки
 formAddNewCard.addEventListener('submit', (evt) => {
   evt.preventDefault();
   addCard(cardNameInput.value, cardLinkInput.value);
-  formAddNewCard.reset();
+  cardNameInput.value = '';
+  cardLinkInput.value = '';
   closePopup(popupAddNewCard);
   // находим кнопку submit и деактивируем ее после создания карточки
   const buttonElement = formAddNewCard.querySelector('.form__submit');
   buttonElement.setAttribute('disabled', 'disabled');
 });
-// листенер закрытия попапа просмотра изображения
-popupViewImageCloseBtn.onclick = () => closePopup(popupViewImage);
-
-// закрытие попапов кликом на оверлей
-popupEditProfile.addEventListener('mousedown', closeByOverlayClick);
-popupAddNewCard.addEventListener('mousedown', closeByOverlayClick);
-popupViewImage.addEventListener('mousedown', closeByOverlayClick);
 
 // автоматическая загрузка карточек на страницу
 renderInitialCards(initialCards);
