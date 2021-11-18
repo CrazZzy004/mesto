@@ -1,5 +1,5 @@
 import {viewImagePopupImg, viewImagePopupName, popupViewImage, popupViewImageCloseBtn} from './constants.js';
-import {handleEscUp} from "./index.js";
+import {openPopup, closePopup} from "./index.js";
 
 export class Card {
   constructor(name, link, cardSelector) {
@@ -28,22 +28,23 @@ export class Card {
   // метод слушателя кнопки "удалить"
   _handleDeleteCard() {
     this._element.remove();
+    this._element = null;
   }
 
   // метод слушателя открытия попапа просмотра изображения
   _handleOpenPopup() {
     viewImagePopupImg.src = this._link;
+    viewImagePopupImg.alt = this._name;
     viewImagePopupName.textContent = this._name;
-    popupViewImage.classList.add('popup_opened');
-    document.addEventListener('keyup', handleEscUp);
+    openPopup(popupViewImage);
   }
 
   // метод слушателя закрытия попапа просмотра изображения
   _handleClosePopup() {
     viewImagePopupImg.src = '';
+    viewImagePopupImg.alt = '';
     viewImagePopupName.textContent = '';
-    popupViewImage.classList.remove('popup_opened');
-    document.removeEventListener('keyup', handleEscUp);
+    closePopup(popupViewImage)
   }
 
   _setEventListeners() {
@@ -71,6 +72,7 @@ export class Card {
     this._setEventListeners();
 
     this._element.querySelector('.element__img').src = this._link;
+    this._element.querySelector('.element__img').alt = this._name;
     this._element.querySelector('.element__title').textContent = this._name;
 
     return this._element;

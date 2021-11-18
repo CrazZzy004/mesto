@@ -44,21 +44,19 @@ function submitEditFormHandler (evt) {
 
   closePopup(popupEditProfile);
 }
-// функция загрузки карточек из массива
-const renderInitialCards = (array) => {
-  array.forEach((item) => {
-    const card = new Card(item.name, item.link, '.element-template');
-    const cardElement = card.generateCard();
 
-    cardsContainer.prepend(cardElement);
-  })
-}
 // функция добавления карточки на страницу из формы
 const addCard = (name, link) => {
   const card = new Card(name, link, '.element-template').generateCard();
   cardsContainer.prepend(card);
 };
 
+// функция загрузки карточек из массива
+const renderInitialCards = (array) => {
+  array.forEach((item) => {
+    addCard(item.name, item.link);
+  })
+};
 
 // Обработчик кнопки Edit попапа редактирования профиля
 profileEditBtn.addEventListener('click', () => {
@@ -91,9 +89,7 @@ formAddNewCard.addEventListener('submit', (evt) => {
   cardNameInput.value = '';
   cardLinkInput.value = '';
   closePopup(popupAddNewCard);
-  // находим кнопку submit и деактивируем ее после создания карточки
-  const buttonElement = formAddNewCard.querySelector('.form__submit');
-  buttonElement.setAttribute('disabled', 'disabled');
+  formAddNewCardValidator.toggleButtonState();
 });
 
 // автоматическая загрузка карточек на страницу
@@ -108,4 +104,4 @@ const formAddNewCardValidator = new FormValidator(config, formAddNewCard);
 formAddNewCardValidator.enableValidation();
 
 
-export {handleEscUp};
+export {openPopup, closePopup};

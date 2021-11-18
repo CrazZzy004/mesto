@@ -38,22 +38,22 @@ export class FormValidator {
   };
 
   // отключение/включение кнопки submit
-  _toggleButtonState(inputList, buttonElement) {
-    if (this._hasInvalidInput(inputList)) {
-      buttonElement.setAttribute('disabled', 'disabled');
+  toggleButtonState() {
+    if (this._hasInvalidInput(this._inputList)) {
+      this._buttonElement.setAttribute('disabled', 'disabled');
     } else {
-      buttonElement.removeAttribute('disabled');
+      this._buttonElement.removeAttribute('disabled');
     }
   };
 
   // метод с хэндерами
   _setEventListeners() {
-    this._toggleButtonState(this._inputList, this._buttonElement);
+    this.toggleButtonState(this._inputList, this._buttonElement);
 
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', () => {
         this._checkInputValidity(this._formElement, inputElement);
-        this._toggleButtonState(this._inputList, this._buttonElement);
+        this.toggleButtonState(this._inputList, this._buttonElement);
       });
     });
 
