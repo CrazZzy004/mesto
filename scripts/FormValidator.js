@@ -1,13 +1,4 @@
-// создаем объект с селекторами
-const config = {
-  popupForm : '.popup__form',
-  inputErrorClass : 'form__input_type_error',
-  inputErrorActive : 'form__input-error_active',
-  formInput : '.form__input',
-  formSubmit : '.form__submit',
-};
-
-class FormValidator {
+export class FormValidator {
   constructor(config, formElement) {
     this._config = config;
     this._formElement = formElement;
@@ -76,9 +67,3 @@ class FormValidator {
     this._setEventListeners();
   };
 }
-
-const formEditProfileValidator = new FormValidator(config, formEditProfile);
-formEditProfileValidator.enableValidation();
-
-const formAddNewCardValidator = new FormValidator(config, formAddNewCard);
-formAddNewCardValidator.enableValidation();
