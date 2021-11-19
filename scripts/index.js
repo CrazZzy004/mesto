@@ -47,7 +47,7 @@ function submitEditFormHandler (evt) {
 
 // функция добавления карточки на страницу из формы
 const addCard = (name, link) => {
-  const card = new Card(name, link, '.element-template').generateCard();
+  const card = new Card(name, link, '.element-template', openPopup, closePopup).generateCard();
   cardsContainer.prepend(card);
 };
 
@@ -103,5 +103,3 @@ formEditProfileValidator.enableValidation();
 const formAddNewCardValidator = new FormValidator(config, formAddNewCard);
 formAddNewCardValidator.enableValidation();
 
-
-export {openPopup, closePopup};

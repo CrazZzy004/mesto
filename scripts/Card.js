@@ -1,12 +1,13 @@
 import {viewImagePopupImg, viewImagePopupName, popupViewImage, popupViewImageCloseBtn} from './constants.js';
-import {openPopup, closePopup} from "./index.js";
 
 export class Card {
-  constructor(name, link, cardSelector) {
+  constructor(name, link, cardSelector, openPopup, closePopup) {
     this._container = document.querySelector(cardSelector);
     this._name = name;
     this._link = link;
     this._cardSelector = cardSelector;
+    this._openPopup = openPopup;
+    this._closePopup = closePopup;
   }
 
   _getTemplate() {
@@ -36,7 +37,7 @@ export class Card {
     viewImagePopupImg.src = this._link;
     viewImagePopupImg.alt = this._name;
     viewImagePopupName.textContent = this._name;
-    openPopup(popupViewImage);
+    this._openPopup(popupViewImage);
   }
 
   // метод слушателя закрытия попапа просмотра изображения
@@ -44,7 +45,7 @@ export class Card {
     viewImagePopupImg.src = '';
     viewImagePopupImg.alt = '';
     viewImagePopupName.textContent = '';
-    closePopup(popupViewImage)
+    this._closePopup(popupViewImage)
   }
 
   _setEventListeners() {
