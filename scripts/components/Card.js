@@ -1,4 +1,4 @@
-import {viewImagePopupImg, viewImagePopupName, popupViewImage, popupViewImageCloseBtn} from './constants.js';
+import {viewImagePopupImg, viewImagePopupName, popupViewImage, popupViewImageCloseBtn} from '../utils/constants.js';
 
 export class Card {
   constructor(name, link, cardSelector, openPopup, closePopup) {
