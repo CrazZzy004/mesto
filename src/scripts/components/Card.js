@@ -28,15 +28,10 @@ export default class Card {
     this._element = null;
   }
 
-  // метод слушателя открытия попапа просмотра изображения
-  _handleOpenPopup() {
-    this._handleCardClick(this._name, this._link);
-  }
-
   _setEventListeners() {
     // открытие попапа просмотра изображения кликом по изображению
-    this._element.querySelector('.element__img').addEventListener('click', () => {
-      this._handleOpenPopup();
+    this._image.addEventListener('click', () => {
+      this._handleCardClick(this._name, this._link);
     })
     // слушатель кнопки удаления карточки
     this._element.querySelector('.element__delete-btn').addEventListener('click', () => {
@@ -51,10 +46,11 @@ export default class Card {
   // метод создания готовой карточки
   generateCard() {
     this._element = this._getTemplate();
+    this._image = this._element.querySelector('.element__img');
     this._setEventListeners();
 
-    this._element.querySelector('.element__img').src = this._link;
-    this._element.querySelector('.element__img').alt = this._name;
+    this._image.src = this._link;
+    this._image.alt = this._name;
     this._element.querySelector('.element__title').textContent = this._name;
 
     return this._element;
