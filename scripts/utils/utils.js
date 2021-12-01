@@ -27,9 +27,9 @@ export function closeByOverlayClick (event) {
   }
 }
 // Заносим данные в форму попапа редактирования профиля
-export function fillInEditProfileFormInputs() {
-  nameInput.value = profileName.textContent;
-  jobInput.value = profileJob.textContent;
+export function fillInEditProfileFormInputs({ username, job }) {
+  nameInput.value = username;
+  jobInput.value = job;
 }
 // Инструкция для обработчика формы попапа редактирования профиля
 export function submitEditFormHandler (evt) {
@@ -41,9 +41,9 @@ export function submitEditFormHandler (evt) {
   closePopup(popupEditProfile);
 }
 
-// функция добавления карточки на страницу из формы
-export const addCard = (name, link) => {
-  const card = new Card(name, link, '.element-template', openPopup, closePopup).generateCard();
-  cardsContainer.prepend(card);
-};
+// // функция добавления карточки на страницу из формы
+// export const addCard = (name, link) => {
+//   const card = new Card(name, link, '.element-template', openPopup, closePopup).generateCard();
+//   cardsContainer.prepend(card);
+// };
 

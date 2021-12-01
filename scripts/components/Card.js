@@ -1,10 +1,9 @@
 import {viewImagePopupImg, viewImagePopupName, popupViewImage, popupViewImageCloseBtn} from '../utils/constants.js';
 
 export class Card {
-  constructor(name, link, cardSelector, openPopup, closePopup) {
-    this._container = document.querySelector(cardSelector);
-    this._name = name;
-    this._link = link;
+  constructor({ data }, cardSelector, openPopup, closePopup) {
+    this._name = data.name;
+    this._link = data.link;
     this._cardSelector = cardSelector;
     this._openPopup = openPopup;
     this._closePopup = closePopup;

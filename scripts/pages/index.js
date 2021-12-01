@@ -1,4 +1,4 @@
-import {popupEditProfile, profileEditBtn, popupEditCloseBtn, formEditProfile, cardLinkInput, cardNameInput, config, cardsContainer, formAddNewCard, popupAddNewCardCloseBtn,
+import {popupEditProfile, profileEditBtn, popupEditCloseBtn, formEditProfile, config, cardsContainer, formAddNewCard, popupAddNewCardCloseBtn,
   popupAddNewCardOpenBtn, popupViewImage, popupAddNewCard, initialCards} from '../utils/constants.js';
 import Section from "../components/Section.js";
 import {FormValidator} from '../components/FormValidator.js';
@@ -7,29 +7,19 @@ import {
   openPopup,
   closePopup,
   fillInEditProfileFormInputs,
-  submitEditFormHandler,
   closeByOverlayClick,
-  addCard
 } from '../utils/utils.js';
+import PopupWithForm from "../components/PopupWithForm.js";
+import UserInfo from "../components/UserInfo.js";
 
 
 
-// Обработчик кнопки Edit попапа редактирования профиля
-profileEditBtn.addEventListener('click', () => {
-  openPopup(popupEditProfile);
-  fillInEditProfileFormInputs();
-});
 // Обработчик кнопки Close попапа редактирования профиля
 popupEditCloseBtn.addEventListener('click', () => {
   closePopup(popupEditProfile);
 });
-// Обработчик кнопки Submit попапа редактирования профиля
-formEditProfile.addEventListener('submit', submitEditFormHandler);
-// листенер кнопки открытия попапа добавления новой карточки
-popupAddNewCardOpenBtn.addEventListener('click', () => {
-  openPopup(popupAddNewCard);
-});
-// листенер кнопки закрытия попапа добавления новой карточки
+
+//листенер кнопки закрытия попапа добавления новой карточки
 popupAddNewCardCloseBtn.addEventListener('click', () => {
   closePopup(popupAddNewCard);
 });
@@ -37,17 +27,6 @@ popupAddNewCardCloseBtn.addEventListener('click', () => {
 popupEditProfile.addEventListener('mousedown', closeByOverlayClick);
 popupAddNewCard.addEventListener('mousedown', closeByOverlayClick);
 popupViewImage.addEventListener('mousedown', closeByOverlayClick);
-
-// листенер submit формы создания карточки
-formAddNewCard.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  addCard(cardNameInput.value, cardLinkInput.value);
-  cardNameInput.value = '';
-  cardLinkInput.value = '';
-  closePopup(popupAddNewCard);
-  formAddNewCardValidator.toggleButtonState();
-});
-
 
 // валидация формы редактирования профиля
 const formEditProfileValidator = new FormValidator(config, formEditProfile);
@@ -57,17 +36,58 @@ formEditProfileValidator.enableValidation();
 const formAddNewCardValidator = new FormValidator(config, formAddNewCard);
 formAddNewCardValidator.enableValidation();
 
+/*----------------------------------------------ПР №8-----------------------------------------------------------------*/
+// функционал создания новой карточки
+const createCard = (data) => {
+  const card = new Card({data}, '.element-template', openPopup, closePopup);
+  const cardElement = card.generateCard();
+  return cardElement;
+};
+// создание попапа с формой добавления новой карточки
+const addCardPopup = new PopupWithForm({
+  popupSelector: '.popup_type_new-card',
+  handleFormSubmit: (formData) => {
+    cardsList.addItem(createCard(formData));
+    addCardPopup.close();
+  }
+});
+// добавляем слушатели этому попапу:
+addCardPopup.setEventListeners();
+
+popupAddNewCardOpenBtn.addEventListener('click', () => {
+  addCardPopup.open();
+})
 
 // отрисовка карточек на странице из массива
 const cardsList = new Section({
   items: initialCards,
   renderer: (item) => {
-    const card = new Card(item.name, item.link, '.element-template', openPopup, closePopup);
-    const cardElement = card.generateCard();
-
-    cardsList.addItem(cardElement);
+    cardsList.addItem(createCard(item));
   },
 }, cardsContainer);
-
-// загрузка карточек из массива на страницу
 cardsList.renderItems();
+/*---------------------------------------------------------------------------------------------------------------------*/
+const userInfo = new UserInfo({
+  username: '.profile__title',
+  job: '.profile__description'
+});
+
+
+// создание попапа с формой редактирования профиля
+const editProfilePopup = new PopupWithForm({
+  popupSelector: '.popup_type_edit',
+  handleFormSubmit: (dataForm) => {
+    userInfo.setUserInfo(dataForm);
+    editProfilePopup.close();
+  }
+});
+editProfilePopup.setEventListeners();
+// Обработчик кнопки Edit попапа редактирования профиля
+profileEditBtn.addEventListener('click', () => {
+  const info = userInfo.getUserInfo();
+  fillInEditProfileFormInputs({
+    username: info.username,
+    job: info.job
+  });
+  editProfilePopup.open();
+});
