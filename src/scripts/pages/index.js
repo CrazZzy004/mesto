@@ -69,6 +69,7 @@ const addCardPopup = new PopupWithForm({
 addCardPopup.setEventListeners();
 // обработчик открытия попапа
 popupAddNewCardOpenBtn.addEventListener('click', () => {
+  formAddNewCardValidator.toggleButtonState();
   addCardPopup.open();
 })
 // отрисовка карточек на странице из массива

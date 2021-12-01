@@ -6,7 +6,7 @@ export default class FormValidator {
     this._buttonElement = this._formElement.querySelector(this._config.formSubmit);
   }
   // добавление класса с ошибкой
-  _showInputError(formElement, inputElement, errorMessage) {
+  _showInputError(inputElement, errorMessage) {
     const errorElement = this._formElement.querySelector(`#${inputElement.id}-error`);
     inputElement.classList.add(this._config.inputErrorClass);
     errorElement.textContent = errorMessage;
@@ -14,7 +14,7 @@ export default class FormValidator {
   };
 
   // удаление класса с ошибкой
-  _hideInputError(formElement, inputElement) {
+  _hideInputError(inputElement) {
     const errorElement = this._formElement.querySelector(`#${inputElement.id}-error`);
     inputElement.classList.remove(this._config.inputErrorClass);
     errorElement.classList.remove(this._config.inputErrorActive);
@@ -22,11 +22,11 @@ export default class FormValidator {
   };
 
   // добавление или удаление текста ошибки в зависимости от валидности поля ввода
-  _checkInputValidity(formElement, inputElement) {
+  _checkInputValidity(inputElement) {
     if (!inputElement.validity.valid) {
-      this._showInputError(this._formElement, inputElement, inputElement.validationMessage);
+      this._showInputError(inputElement, inputElement.validationMessage);
     } else {
-      this._hideInputError(this._formElement, inputElement);
+      this._hideInputError(inputElement);
     }
   };
 
@@ -39,7 +39,7 @@ export default class FormValidator {
 
   // отключение/включение кнопки submit
   toggleButtonState() {
-    if (this._hasInvalidInput(this._inputList)) {
+    if (this._hasInvalidInput()) {
       this._buttonElement.setAttribute('disabled', 'disabled');
     } else {
       this._buttonElement.removeAttribute('disabled');
@@ -48,12 +48,12 @@ export default class FormValidator {
 
   // метод с хэндерами
   _setEventListeners() {
-    this.toggleButtonState(this._inputList, this._buttonElement);
+    this.toggleButtonState();
 
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', () => {
-        this._checkInputValidity(this._formElement, inputElement);
-        this.toggleButtonState(this._inputList, this._buttonElement);
+        this._checkInputValidity(inputElement);
+        this.toggleButtonState();
       });
     });
 
