@@ -1,7 +1,7 @@
 import './index.css';
 
 import {
-  profileEditBtn, formEditProfile, config, cardsContainer, formAddNewCard,
+  profileEditBtn, formEditProfile, config, formAddNewCard,
   popupAddNewCardOpenBtn, initialCards, nameInput, jobInput
 } from '../utils/constants.js';
 import Section from "../components/Section.js";
@@ -74,7 +74,7 @@ const cardsList = new Section({
   renderer: (item) => {
     cardsList.addItem(createCard(item));
   },
-}, cardsContainer);
+}, '.elements');
 cardsList.renderItems();
 
 
