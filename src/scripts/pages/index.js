@@ -1,3 +1,5 @@
+import './index.css';
+
 import {
   profileEditBtn, formEditProfile, config, cardsContainer, formAddNewCard,
   popupAddNewCardOpenBtn, initialCards, nameInput, jobInput
@@ -66,6 +68,7 @@ const addCardPopup = new PopupWithForm({
 addCardPopup.setEventListeners();
 // обработчик открытия попапа
 popupAddNewCardOpenBtn.addEventListener('click', () => {
+  formAddNewCardValidator.enableValidation();
   addCardPopup.open();
 })
 // отрисовка карточек на странице из массива
