@@ -1,32 +1,15 @@
-import {popupEditProfile, profileEditBtn, popupEditCloseBtn, formEditProfile, config, cardsContainer, formAddNewCard, popupAddNewCardCloseBtn,
-  popupAddNewCardOpenBtn, popupViewImage, popupAddNewCard, initialCards} from '../utils/constants.js';
+import {profileEditBtn, formEditProfile, config, cardsContainer, formAddNewCard,
+  popupAddNewCardOpenBtn, initialCards} from '../utils/constants.js';
 import Section from "../components/Section.js";
 import {FormValidator} from '../components/FormValidator.js';
 import {Card} from "../components/Card.js";
 import {
-  openPopup,
   closePopup,
   fillInEditProfileFormInputs,
-  closeByOverlayClick,
 } from '../utils/utils.js';
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
-
-
-
-// Обработчик кнопки Close попапа редактирования профиля
-popupEditCloseBtn.addEventListener('click', () => {
-  closePopup(popupEditProfile);
-});
-
-//листенер кнопки закрытия попапа добавления новой карточки
-popupAddNewCardCloseBtn.addEventListener('click', () => {
-  closePopup(popupAddNewCard);
-});
-// закрытие попапов кликом на оверлей
-popupEditProfile.addEventListener('mousedown', closeByOverlayClick);
-popupAddNewCard.addEventListener('mousedown', closeByOverlayClick);
-popupViewImage.addEventListener('mousedown', closeByOverlayClick);
+import PopupWithImage from "../components/PopupWithImage.js";
 
 // валидация формы редактирования профиля
 const formEditProfileValidator = new FormValidator(config, formEditProfile);
@@ -39,7 +22,13 @@ formAddNewCardValidator.enableValidation();
 /*----------------------------------------------ПР №8-----------------------------------------------------------------*/
 // функционал создания новой карточки
 const createCard = (data) => {
-  const card = new Card({data}, '.element-template', openPopup, closePopup);
+  const card = new Card({
+    data: data,
+    handleCardClick: (data) => {
+      const viewImagePopup = new PopupWithImage('.popup_type_image');
+      viewImagePopup.setEventListeners();
+      viewImagePopup.open(data.link, data.name);
+    }}, '.element-template', closePopup);
   const cardElement = card.generateCard();
   return cardElement;
 };

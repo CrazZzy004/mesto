@@ -1,12 +1,12 @@
 import {viewImagePopupImg, viewImagePopupName, popupViewImage, popupViewImageCloseBtn} from '../utils/constants.js';
 
 export class Card {
-  constructor({ data }, cardSelector, openPopup, closePopup) {
+  constructor({ data, handleCardClick }, cardSelector, closePopup) {
     this._name = data.name;
     this._link = data.link;
     this._cardSelector = cardSelector;
-    this._openPopup = openPopup;
     this._closePopup = closePopup;
+    this._handleCardClick = handleCardClick;
   }
 
   _getTemplate() {
@@ -33,10 +33,7 @@ export class Card {
 
   // метод слушателя открытия попапа просмотра изображения
   _handleOpenPopup() {
-    viewImagePopupImg.src = this._link;
-    viewImagePopupImg.alt = this._name;
-    viewImagePopupName.textContent = this._name;
-    this._openPopup(popupViewImage);
+    this._handleCardClick(this._name, this._link);
   }
 
   // метод слушателя закрытия попапа просмотра изображения
