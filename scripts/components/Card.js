@@ -1,11 +1,8 @@
-import {viewImagePopupImg, viewImagePopupName, popupViewImage, popupViewImageCloseBtn} from '../utils/constants.js';
-
-export class Card {
-  constructor({ data, handleCardClick }, cardSelector, closePopup) {
+export default class Card {
+  constructor({ data, handleCardClick }, cardSelector) {
     this._name = data.name;
     this._link = data.link;
     this._cardSelector = cardSelector;
-    this._closePopup = closePopup;
     this._handleCardClick = handleCardClick;
   }
 
@@ -36,22 +33,10 @@ export class Card {
     this._handleCardClick(this._name, this._link);
   }
 
-  // метод слушателя закрытия попапа просмотра изображения
-  _handleClosePopup() {
-    viewImagePopupImg.src = '';
-    viewImagePopupImg.alt = '';
-    viewImagePopupName.textContent = '';
-    this._closePopup(popupViewImage)
-  }
-
   _setEventListeners() {
     // открытие попапа просмотра изображения кликом по изображению
     this._element.querySelector('.element__img').addEventListener('click', () => {
       this._handleOpenPopup();
-    })
-    // закрытие попапа просмотра изображения кликом на кнопку закрытия
-    popupViewImageCloseBtn.addEventListener('click', () => {
-      this._handleClosePopup();
     })
     // слушатель кнопки удаления карточки
     this._element.querySelector('.element__delete-btn').addEventListener('click', () => {
