@@ -12,5 +12,7 @@
 * JavaScript
 * Псевдоклассы
 * Валидация форм
+* Классы JS
+* Сборка Webpack
 
 ## [Ссылка на проект &rarr;](https://verachernushina.github.io/mesto/index.html)
