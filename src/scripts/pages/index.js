@@ -38,7 +38,10 @@ const userInfo = new UserInfo({
 const editProfilePopup = new PopupWithForm({
   popupSelector: '.popup_type_edit',
   handleFormSubmit: (dataForm) => {
-    userInfo.setUserInfo(dataForm);
+    userInfo.setUserInfo({
+      username: dataForm.username,
+      job: dataForm.job
+    });
     editProfilePopup.close();
   }
 });
