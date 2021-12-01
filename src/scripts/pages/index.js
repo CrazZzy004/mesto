@@ -22,8 +22,6 @@ const createCard = (data) => {
   const card = new Card({
     data: data,
     handleCardClick: (name, link) => {
-      const viewImagePopup = new PopupWithImage('.popup_type_image');
-      viewImagePopup.setEventListeners();
       viewImagePopup.open(name, link);
     }}, '.element-template');
   const cardElement = card.generateCard();
@@ -68,7 +66,6 @@ const addCardPopup = new PopupWithForm({
 addCardPopup.setEventListeners();
 // обработчик открытия попапа
 popupAddNewCardOpenBtn.addEventListener('click', () => {
-  formAddNewCardValidator.enableValidation();
   addCardPopup.open();
 })
 // отрисовка карточек на странице из массива
@@ -79,6 +76,11 @@ const cardsList = new Section({
   },
 }, cardsContainer);
 cardsList.renderItems();
+
+
+/* Попап просмотра изображения */
+const viewImagePopup = new PopupWithImage('.popup_type_image');
+viewImagePopup.setEventListeners();
 
 
 /* Валидация форм */
