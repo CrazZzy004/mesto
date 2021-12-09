@@ -13,6 +13,13 @@ const popupAddNewCard = document.querySelector('.popup_type_new-card');
 const popupAddNewCardOpenBtn = document.querySelector('.profile__add-button');
 // находим форму попапа добавления новой карточки
 const formAddNewCard = popupAddNewCard.querySelector('.popup__form');
+// попап редактирования аватара пользователя
+const popupEditAvatar = document.querySelector('.popup_type_avatar');
+// Форма редактирования аватара пользователя
+const formEditAvatar = popupEditAvatar.querySelector('.popup__form');
+// кнопка редактирования аватара пользователя
+const buttonEditAvatar = document.querySelector('.profile__avatar-btn');
+const avatar = document.querySelector('.profile__avatar');
 
 // объект с селекторами
 const config = {
@@ -52,4 +59,5 @@ const initialCards = [
 
 
 export {popupEditProfile, profileEditBtn, formEditProfile, nameInput, jobInput, formAddNewCard,
-  popupAddNewCardOpenBtn, popupAddNewCard, initialCards, config};
+  popupAddNewCardOpenBtn, popupAddNewCard, initialCards, config, buttonEditAvatar, formEditAvatar,
+avatar};

@@ -2,7 +2,8 @@ import './index.css';
 
 import {
   profileEditBtn, formEditProfile, config, formAddNewCard,
-  popupAddNewCardOpenBtn, initialCards, nameInput, jobInput
+  popupAddNewCardOpenBtn, initialCards, nameInput, jobInput,
+  buttonEditAvatar, formEditAvatar, avatar
 } from '../utils/constants.js';
 import Section from "../components/Section.js";
 import FormValidator from '../components/FormValidator.js';
@@ -10,6 +11,7 @@ import Card from "../components/Card.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import PopupWithImage from "../components/PopupWithImage.js";
+
 
 /* Функции */
 // Заносим данные в форму попапа редактирования профиля
@@ -27,6 +29,7 @@ const createCard = (data) => {
   const cardElement = card.generateCard();
   return cardElement;
 };
+
 
 /* Профиль юзера */
 // создание экземпляра класса, отвечающего за отображение информации о пользователе
@@ -46,6 +49,20 @@ const editProfilePopup = new PopupWithForm({
   }
 });
 editProfilePopup.setEventListeners();
+// Создание попапа редактирования аватара пользователя
+const editAvatarPopup = new PopupWithForm({
+  popupSelector: '.popup_type_avatar',
+  handleFormSubmit: (data) => {
+    avatar.src = data.link;
+    editAvatarPopup.close();
+  }
+});
+editAvatarPopup.setEventListeners();
+// Обработчик кнопки Edit аватара пользователя
+buttonEditAvatar.addEventListener('click', () => {
+  formEditAvatarValidator.toggleButtonState();
+  editAvatarPopup.open();
+});
 // Обработчик кнопки Edit попапа редактирования профиля
 profileEditBtn.addEventListener('click', () => {
   const info = userInfo.getUserInfo();
@@ -55,6 +72,7 @@ profileEditBtn.addEventListener('click', () => {
   });
   editProfilePopup.open();
 });
+
 
 /* Карточки с изображениями */
 // создание попапа с формой добавления новой карточки
@@ -94,7 +112,9 @@ formEditProfileValidator.enableValidation();
 // валидация формы добавления новой карточки
 const formAddNewCardValidator = new FormValidator(config, formAddNewCard);
 formAddNewCardValidator.enableValidation();
-
+// Валидация формы редактирования аватара пользователя
+const formEditAvatarValidator = new FormValidator(config, formEditAvatar);
+formEditAvatarValidator.enableValidation();
 
 
 
