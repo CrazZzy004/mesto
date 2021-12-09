@@ -1,5 +1,7 @@
 .element__like-btn {
-  margin-top: 5px;
+  display: block;
+  margin: 0 0 3px 0;
+  padding: 0;
   background: transparent url(../../../images/element-heart.svg);
   background-size: contain;
   background-repeat: no-repeat;
