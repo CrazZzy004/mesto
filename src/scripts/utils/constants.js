@@ -19,6 +19,7 @@ const popupEditAvatar = document.querySelector('.popup_type_avatar');
 const formEditAvatar = popupEditAvatar.querySelector('.popup__form');
 // кнопка редактирования аватара пользователя
 const buttonEditAvatar = document.querySelector('.profile__avatar-btn');
+// аватар пользователя
 const avatar = document.querySelector('.profile__avatar');
 
 // объект с селекторами

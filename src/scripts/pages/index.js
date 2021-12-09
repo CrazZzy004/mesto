@@ -99,6 +99,18 @@ const cardsList = new Section({
 }, '.elements');
 cardsList.renderItems();
 
+/* Попап удаления карточки */
+const deleteCardPopup = new PopupWithForm({
+  popupSelector: '.popup_type_delete-card',
+  handleFormSubmit: (event) => {
+    console.log(event.target);
+  }
+});
+deleteCardPopup.setEventListeners();
+const deleteBtn = document.querySelector('.element__delete-btn');
+deleteBtn.addEventListener('click', () => {
+  deleteCardPopup.open();
+});
 
 /* Попап просмотра изображения */
 const viewImagePopup = new PopupWithImage('.popup_type_image');
