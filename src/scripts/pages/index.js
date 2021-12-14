@@ -2,7 +2,7 @@ import './index.css';
 
 import {
   profileEditBtn, formEditProfile, config, formAddNewCard,
-  popupAddNewCardOpenBtn, initialCards, nameInput, jobInput,
+  popupAddNewCardOpenBtn, nameInput, jobInput,
   buttonEditAvatar, formEditAvatar, avatar
 } from '../utils/constants.js';
 import Section from "../components/Section.js";
@@ -11,50 +11,85 @@ import Card from "../components/Card.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import PopupWithImage from "../components/PopupWithImage.js";
+import Api from "../components/Api.js";
+import PopupWithConfirmation from "../components/PopupWithConfirmation.js";
 
 
-/* Функции */
-// Заносим данные в форму попапа редактирования профиля
-function fillInEditProfileFormInputs({ username, job }) {
-  nameInput.value = username;
-  jobInput.value = job;
-};
-// функционал создания новой карточки
-const createCard = (data) => {
-  const card = new Card({
-    data: data,
-    handleCardClick: (name, link) => {
-      viewImagePopup.open(name, link);
-    }}, '.element-template');
-  const cardElement = card.generateCard();
-  return cardElement;
-};
+/* ---------- API ----------- */
+const api = new Api({
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-31',
+  headers: {
+    authorization: '149edd5b-e153-46c6-af52-dbaf211389a2',
+    'Content-Type': 'application/json'
+  }
+});
+
+let userId;
+
+// Загрузка готовых карточек и данных о пользователе с сервера
+Promise.all([api.getInitialCards(), api.getUserInfo()])
+  .then(([initialCards, userData]) => {
+    userInfo.setUserInfo(userData);
+    userId = userData._id;
+    cardsList.renderItems(initialCards);
+  })
+  .catch((err) => {
+    console.log(`Ошибка: ${err}`);
+  });
 
 
-/* Профиль юзера */
+
+/* -------------- Профиль юзера --------------- */
 // создание экземпляра класса, отвечающего за отображение информации о пользователе
 const userInfo = new UserInfo({
   username: '.profile__title',
-  job: '.profile__description'
+  job: '.profile__description',
+  avatar: '.profile__avatar'
 });
+
+
 // создание попапа с формой редактирования профиля
 const editProfilePopup = new PopupWithForm({
   popupSelector: '.popup_type_edit',
   handleFormSubmit: (dataForm) => {
-    userInfo.setUserInfo({
-      username: dataForm.username,
-      job: dataForm.job
-    });
-    editProfilePopup.close();
+    editProfilePopup.loading(true);
+    api.editUserInfo(dataForm)
+      .then((dataForm) => {
+        userInfo.setUserInfo(dataForm);
+        editProfilePopup.close();
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      })
+      .finally(() => {
+        editProfilePopup.loading(false);
+      });
   }
 });
 editProfilePopup.setEventListeners();
+
+// Заносим данные в форму попапа редактирования профиля
+function fillInEditProfileFormInputs({ username, job }) {
+  nameInput.value = username;
+  jobInput.value = job;
+}
+
 // Создание попапа редактирования аватара пользователя
 const editAvatarPopup = new PopupWithForm({
   popupSelector: '.popup_type_avatar',
   handleFormSubmit: (data) => {
-    avatar.src = data.link;
-    editAvatarPopup.close();
+    editAvatarPopup.loading(true);
+    api.editAvatar(data)
+      .then((data) => {
+        avatar.src = data.avatar;
+        editAvatarPopup.close();
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      })
+      .finally(() => {
+        editAvatarPopup.loading(false);
+      });
   }
 });
 editAvatarPopup.setEventListeners();
@@ -74,13 +109,50 @@ profileEditBtn.addEventListener('click', () => {
 });
 
 
-/* Карточки с изображениями */
+/* ----------- Карточки с изображениями ----------- */
+
+// функционал создания новой карточки
+const createCard = (data) => {
+  const card = new Card({
+    data: data,
+    cardSelector: '.element-template',
+    userId: userId,
+    handleCardClick: (name, link) => {
+      viewImagePopup.open(name, link);
+    },
+    handleDeleteIconClick: (card, cardId) => {
+      deleteCardPopup.open(card, cardId);
+    },
+    api: api
+  });
+  const cardElement = card.generateCard();
+  return cardElement;
+};
+
+// Создание экземпляра класса Section
+const cardsList = new Section({
+  renderer: (card) => {
+    cardsList.addItem(createCard(card));
+  },
+}, '.elements');
+
+
 // создание попапа с формой добавления новой карточки
 const addCardPopup = new PopupWithForm({
   popupSelector: '.popup_type_new-card',
   handleFormSubmit: (formData) => {
-    cardsList.addItem(createCard(formData));
-    addCardPopup.close();
+    addCardPopup.loading(true);
+    api.addCard(formData)
+      .then((formData) => {
+        cardsList.addItem(createCard(formData));
+        addCardPopup.close();
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      })
+      .finally(() => {
+        addCardPopup.loading(false);
+      });
   }
 });
 // добавляем слушатели этому попапу:
@@ -90,27 +162,24 @@ popupAddNewCardOpenBtn.addEventListener('click', () => {
   formAddNewCardValidator.toggleButtonState();
   addCardPopup.open();
 })
-// отрисовка карточек на странице из массива
-const cardsList = new Section({
-  items: initialCards,
-  renderer: (item) => {
-    cardsList.addItem(createCard(item));
-  },
-}, '.elements');
-cardsList.renderItems();
+
 
 /* Попап удаления карточки */
-const deleteCardPopup = new PopupWithForm({
+const deleteCardPopup = new PopupWithConfirmation({
   popupSelector: '.popup_type_delete-card',
-  handleFormSubmit: (event) => {
-    console.log(event.target);
+  handleDeleteCard: (card, cardId) => {
+    api.deleteCard(cardId)
+      .then(() => {
+        card.remove();
+        deleteCardPopup.close();
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
   }
 });
 deleteCardPopup.setEventListeners();
-const deleteBtn = document.querySelector('.element__delete-btn');
-deleteBtn.addEventListener('click', () => {
-  deleteCardPopup.open();
-});
+
 
 /* Попап просмотра изображения */
 const viewImagePopup = new PopupWithImage('.popup_type_image');
