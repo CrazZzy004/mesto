@@ -1,15 +1,16 @@
 export default class Card {
-  constructor({ data, cardSelector, userId, handleCardClick, handleDeleteIconClick, api }) {
+  constructor({ data, cardSelector, userId, handleCardClick, handleDeleteIconClick, handleSetLike, handleRemoveLike }) {
     this._name = data.name;
     this._link = data.link;
     this._cardSelector = cardSelector;
     this._userId = userId;
     this._cardId = data._id;
     this._cardOwnerId = data.owner._id;
-    this._api = api;
     this._handleCardClick = handleCardClick;
     this._handleDeleteIconClick = handleDeleteIconClick;
     this._likes = data.likes;
+    this._handleSetLike = handleSetLike;
+    this._handleRemoveLike = handleRemoveLike;
   }
 
   // Получаем шаблон карточки
@@ -41,7 +42,11 @@ export default class Card {
     })
     // слушатель кнопки лайк
     this._likeBtn.addEventListener('click', () => {
-      this._handleLikeCard();
+      if (this._likeBtn.classList.contains('element__like-btn_active')) {
+        this._handleRemoveLike(this._cardId);
+      } else {
+        this._handleSetLike(this._cardId);
+      }
     })
   }
 
@@ -74,26 +79,10 @@ export default class Card {
   }
 
   // поставить/удалить лайк, изменение количества лайков
-  _handleLikeCard() {
-    if (this._likeBtn.classList.contains('element__like-btn_active')) {
-      this._api.deleteLike(this._cardId)
-         .then((res) => {
-          this._likeBtn.classList.remove('element__like-btn_active');
-          this._likesNumber.textContent = res.likes.length;
-        })
-        .catch((err) => {
-          console.log(`Ошибка: ${err}`);
-        });
-    } else {
-      this._api.setLike(this._cardId)
-        .then((res) => {
-          this._likeBtn.classList.add('element__like-btn_active');
-          this._likesNumber.textContent = res.likes.length;
-        })
-        .catch((err) => {
-          console.log(`Ошибка: ${err}`);
-        });
-    }
+  handleLikeCard(data) {
+    this._likes = data.likes;
+    this._likesNumber.textContent = this._likes.length;
+    this._likeBtn.classList.toggle('element__like-btn_active');
   }
 
   // проверяем владельца карточки и убираем кнопку Delete

@@ -137,7 +137,24 @@ const createCard = (data) => {
           });
       });
     },
-    api: api
+    handleSetLike: (cardId) => {
+      api.setLike(cardId)
+        .then((data) => {
+          card.handleLikeCard(data);
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err}`);
+        });
+    },
+    handleRemoveLike: (cardId) => {
+      api.deleteLike(cardId)
+        .then((data) => {
+          card.handleLikeCard(data);
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err}`);
+        });
+    }
   });
   const cardElement = card.generateCard();
   return cardElement;
