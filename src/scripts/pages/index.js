@@ -120,8 +120,22 @@ const createCard = (data) => {
     handleCardClick: (name, link) => {
       viewImagePopup.open(name, link);
     },
-    handleDeleteIconClick: (card, cardId) => {
-      deleteCardPopup.open(card, cardId);
+    handleDeleteIconClick: (cardId) => {
+      const deleteCardPopup = new PopupWithConfirmation({
+        popupSelector: '.popup_type_delete-card'
+      });
+      deleteCardPopup.setEventListeners();
+      deleteCardPopup.open();
+      deleteCardPopup.submitCallback(() => {
+        api.deleteCard(cardId)
+          .then(() => {
+            deleteCardPopup.close();
+            card.deleteCard();
+          })
+          .catch((err) => {
+            console.log(`Ошибка: ${err}`);
+          });
+      });
     },
     api: api
   });
@@ -162,24 +176,6 @@ popupAddNewCardOpenBtn.addEventListener('click', () => {
   formAddNewCardValidator.toggleButtonState();
   addCardPopup.open();
 })
-
-
-/* Попап удаления карточки */
-const deleteCardPopup = new PopupWithConfirmation({
-  popupSelector: '.popup_type_delete-card',
-  handleDeleteCard: (card, cardId) => {
-    api.deleteCard(cardId)
-      .then(() => {
-        card.remove();
-        deleteCardPopup.close();
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-      });
-  }
-});
-deleteCardPopup.setEventListeners();
-
 
 /* Попап просмотра изображения */
 const viewImagePopup = new PopupWithImage('.popup_type_image');

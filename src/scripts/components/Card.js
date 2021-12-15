@@ -23,6 +23,12 @@ export default class Card {
     return this._card;
   }
 
+  // Удаление карточки
+  deleteCard() {
+    this._element.remove();
+    this._element = null;
+  }
+
   // Устанавливаем слушатели на карточку
   _setEventListeners() {
     // открытие попапа просмотра изображения кликом по изображению
@@ -31,7 +37,7 @@ export default class Card {
     })
     // слушатель кнопки удаления карточки
     this._deleteBtn.addEventListener('click', () => {
-      this._handleDeleteIconClick(this._card, this._cardId);
+      this._handleDeleteIconClick(this._cardId);
     })
     // слушатель кнопки лайк
     this._likeBtn.addEventListener('click', () => {

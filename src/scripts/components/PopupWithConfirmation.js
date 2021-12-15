@@ -1,17 +1,14 @@
 import Popup from "./Popup.js";
 
 export default class PopupWithConfirmation extends Popup {
-  constructor({ popupSelector, handleDeleteCard }) {
+  constructor({ popupSelector }) {
     super(popupSelector);
-    this._handleDeleteCard = handleDeleteCard;
     this._form = this._popup.querySelector('.popup__form');
   }
 
-  // Добавляем информацию о конкретной карточке в момент открытия попапа
-  open(card, cardId) {
-    this._card = card;
-    this._cardId = cardId;
-    super.open();
+  // принимает коллбэк на удаление карточки
+  submitCallback(removing) {
+    this._handleSubmit = removing;
   }
 
   // удаление карточки по нажатию на submit
@@ -19,7 +16,7 @@ export default class PopupWithConfirmation extends Popup {
     super.setEventListeners();
     this._form.addEventListener('click', (event) => {
       event.preventDefault();
-      this._handleDeleteCard(this._card, this._cardId);
-    })
+      this._handleSubmit();
+    });
   }
 }
