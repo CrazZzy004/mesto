@@ -121,10 +121,6 @@ const createCard = (data) => {
       viewImagePopup.open(name, link);
     },
     handleDeleteIconClick: (cardId) => {
-      const deleteCardPopup = new PopupWithConfirmation({
-        popupSelector: '.popup_type_delete-card'
-      });
-      deleteCardPopup.setEventListeners();
       deleteCardPopup.open();
       deleteCardPopup.submitCallback(() => {
         api.deleteCard(cardId)
@@ -167,6 +163,11 @@ const cardsList = new Section({
   },
 }, '.elements');
 
+// Создаем попап с подтверждением удаления карточки
+const deleteCardPopup = new PopupWithConfirmation({
+  popupSelector: '.popup_type_delete-card'
+});
+deleteCardPopup.setEventListeners();
 
 // создание попапа с формой добавления новой карточки
 const addCardPopup = new PopupWithForm({
