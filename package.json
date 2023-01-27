@@ -9,16 +9,6 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/VeraChernushina/mesto.git"
-  },
-  "author": "Vera Chernushina",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/VeraChernushina/mesto/issues"
-  },
-  "homepage": "https://github.com/VeraChernushina/mesto#readme",
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
