@@ -24,13 +24,10 @@
 * API сервера Яндекс.Практикум
 * Webpack
 
-## Ссылки на проект и на макет:
-* [Проект на Github Pages](https://verachernushina.github.io/mesto/)
-* [Макет в Figma](https://www.figma.com/file/2cn9N9jSkmxD84oJik7xL7/JavaScript.-Sprint-4?node-id=0%3A1)
 
 ## Инструкция для работы с проектом:
 ```
-git clone git@github.com:VeraChernushina/mesto.git
+git clone git@github.com/CrazZzy004/mesto.git
 cd mesto
 npm i webpack --save-dev
 npm run build
